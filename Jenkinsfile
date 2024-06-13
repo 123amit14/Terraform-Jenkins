@@ -14,7 +14,7 @@ pipeline {
         stage('checkout') {
             steps {
                 dir("terraform") {
-                    git "https://github.com/123amit14/Terraform-Jenkins.git"
+                    git branch: 'main', url: 'https://github.com/123amit14/Terraform-Jenkins.git'
                 }
             }
         }
