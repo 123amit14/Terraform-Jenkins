@@ -1,6 +1,6 @@
 pipeline {
     parameters {
-        booleanParam(name: 'autoApprove', defaultValue: true, description: 'Automatically run apply after generating plan?')
+        choice(name: 'action', choices: ['apply', 'destroy'], description: 'Select the action to perform')    
     } 
 
     environment {
@@ -32,7 +32,7 @@ pipeline {
         stage('Approval') {
             when {
                 not {
-                    equals expected: true, actual: params.autoApprove
+                    equals expected: true, actual: params.action
                 }
             }
             steps {
