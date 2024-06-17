@@ -31,8 +31,9 @@ pipeline {
 
         stage('Approval') {
             when {
-                not {
-                    equals expected: true, actual: params.action
+                // Only prompt for approval if action is 'apply'
+                expression {
+                    params.action == 'apply'
                 }
             }
             steps {
@@ -44,10 +45,16 @@ pipeline {
             }
         }
 
-        stage('Apply') {
+        stage('Apply or Destroy') {
             steps {
                 dir("terraform") {
-                    sh 'terraform apply -input=false tfplan'
+                    script {
+                        if (params.action == 'apply') {
+                            sh 'terraform apply -input=false tfplan'
+                        } else if (params.action == 'destroy') {
+                            sh 'terraform destroy -auto-approve'
+                        }
+                    }
                 }
             }
         }
