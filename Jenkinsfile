@@ -4,35 +4,27 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/123amit14/Terraform-Jenkins'
+                git branch: 'main',
+                    credentialsId: '1',
+                    url: 'https://github.com/123amit14/Terraform-Jenkins.git'
             }
         }
 
         stage('Terraform Init') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'aws-creds',
-                    usernameVariable: 'AWS_ACCESS_KEY_ID',
-                    passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                sh 'terraform init'
+            }
+        }
 
-                    sh '''
-                        cd terraform
-                        terraform init
-                    '''
-                }
+        stage('Terraform Plan') {
+            steps {
+                sh 'terraform plan'
             }
         }
 
         stage('Terraform Apply') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'aws-creds',
-                    usernameVariable: 'AWS_ACCESS_KEY_ID',
-                    passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-
-                    sh '''
-                        cd terraform
-                        terraform apply -auto-approve
-                    '''
-                }
+                sh 'terraform apply -auto-approve'
             }
         }
     }
