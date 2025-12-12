@@ -31,7 +31,7 @@ pipeline {
                 sh '''
                   export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_USR
                   export AWS_SECRET_ACCESS_KEY=$AWS_ACCESS_KEY_ID_PSW
-                  terraform apply -auto-approve
+                  terraform destroy -auto-approve
                 '''
             }
         }
